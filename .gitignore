@@ -1,0 +1,57 @@
+# ОС и редакторы
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
+*.sublime-*
+*.code-workspace
+
+# Общие временные файлы
+*.log
+*.tmp
+*.bak
+*.pid
+*.seed
+*.pid.lock
+
+# Окружения
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Общие артефакты сборки
+dist/
+build/
+coverage/
+htmlcov/
+
+# Nix / devcontainers / direnv
+.direnv/
+**/.direnv/
+
+# Docker
+**/.dockerignore
+
+# ML / большие файлы
+**/*.pth
+**/*.pt
+**/*.weights
+**/*.bin
+**/*.safetensors
+**/*.onnx
+**/checkpoints/
+**/models/
+**/wandb/
+**/tensorboard/
+**/mlruns/
+**/lightning_logs/
+**/runs/
+
+# Документация / большие данные
+**/data/
+**/datasets/
+**/large-data/
+**/tmp-data/

@@ -1,0 +1,32 @@
+# Бинарники и тесты
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+*.prof
+
+# go tool artifacts
+cover.out
+coverage.out
+profile.out
+cpu.prof
+mem.prof
+
+# Сгенерированные protobuf файлы
+**/*.pb.go
+**/*.pb.gw.go
+**/*.grpc.pb.go
+**/*.swagger.json
+
+# Локальные инструменты / кэш
+bin/
+tmp/
+debug/
+*.swp
+
+# Go workspace / multi-module
+go.work
+go.work.sum

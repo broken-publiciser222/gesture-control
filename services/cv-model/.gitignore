@@ -1,0 +1,58 @@
+# uv / virtual environments
+.venv/
+venv/
+env/
+.venv*
+
+# Ruff cache
+.ruff_cache/
+
+# Pytest
+.pytest_cache/
+.cache/
+htmlcov/
+.coverage
+coverage.xml
+*.cover
+junit.xml
+
+# PyTorch / ML checkpoints & large files
+*.ckpt
+*.pt
+*.pth
+*.safetensors
+*.onnx
+**/checkpoints/
+**/weights/
+**/models/local/
+**/runs/
+**/tensorboard/
+**/wandb/
+**/mlruns/
+**/lightning_logs/
+**/output/
+**/predictions/
+**/results/
+
+# Jupyter / notebooks
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+*.ipynb
+
+# mypy / pyright / type checker caches
+.mypy_cache/
+.pytype/
+.dmypy.json
+.dmypy/
+
+# gRPC python generated
+**/*_pb2.py
+**/*_pb2_grpc.py
+**/*_grpc.py
+
+# Локальные эксперименты / временные данные
+tmp/
+debug/
+scratch/
+notebooks/
+experiments/
