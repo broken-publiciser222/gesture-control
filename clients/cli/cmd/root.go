@@ -13,6 +13,7 @@ var rootCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Hello, 世界!")
 	},
+	SilenceUsage: true,
 }
 
 func Execute() {
