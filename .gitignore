@@ -39,6 +39,8 @@ htmlcov/
 **/bin/
 **/pkg/
 **/vendor/
+go.work
+go.work.sum
 
 # Python
 **/__pycache__/

@@ -26,7 +26,3 @@ bin/
 tmp/
 debug/
 *.swp
-
-# Go workspace / multi-module
-go.work
-go.work.sum
