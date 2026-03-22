@@ -19,7 +19,6 @@ var startCmd = &cobra.Command{
 		fmt.Println("Утилита запущена...")
 		return nil
 	},
-	SilenceErrors: true,
 }
 
 func init() {
