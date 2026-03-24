@@ -31,33 +31,6 @@ type Config struct {
 	LogLevel   string       `mapstructure:"log_level" yaml:"log_level"`
 }
 
-func Init() error {
-	path, err := ConfigPath()
-	if err != nil {
-		return err
-	}
-
-	viper.SetConfigFile(path)
-	viper.SetConfigType("yaml")
-	viper.SetEnvPrefix("gesture")
-	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
-	viper.AutomaticEnv()
-
-	setDefaults()
-
-	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
-		return fmt.Errorf("create config dir: %w", err)
-	}
-	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
-		return nil
-	}
-	if err := viper.ReadInConfig(); err != nil {
-		return fmt.Errorf("read config: %w", err)
-	}
-
-	return nil
-}
-
 func setDefaults() {
 	viper.SetDefault("gateway_url", "wss://api.example.com/ws")
 	viper.SetDefault("ffmpeg.resolution", "640x480")
@@ -68,7 +41,7 @@ func setDefaults() {
 	viper.SetDefault("log_level", "info")
 }
 
-func ConfigPath() (string, error) {
+func ConfigDirPath() (string, error) {
 	home, err := os.UserHomeDir()
 	if err != nil {
 		return "", err
@@ -76,22 +49,71 @@ func ConfigPath() (string, error) {
 
 	switch runtime.GOOS {
 	case "darwin":
-		return filepath.Join(home, "Library", "Application Support", "gesture-control", "config.yaml"), nil
+		return filepath.Join(home, "Library", "Application Support", "gesture-control"), nil
 	case "windows":
 		appData := os.Getenv("APPDATA")
 		if appData == "" {
 			appData = filepath.Join(home, "AppData", "Roaming")
 		}
 
-		return filepath.Join(appData, "gesture-control", "config.yaml"), nil
+		return filepath.Join(appData, "gesture-control"), nil
 	default:
 		base := os.Getenv("XDG_CONFIG_HOME")
 		if base == "" {
 			base = filepath.Join(home, ".config")
 		}
 
-		return filepath.Join(base, "gesture-control", "config.yaml"), nil
+		return filepath.Join(base, "gesture-control"), nil
 	}
+}
+
+func ConfigFilePath() (string, error) {
+	appPath, err := ConfigDirPath()
+	if err != nil {
+		return "", err
+	}
+
+	return filepath.Join(appPath, "config.yaml"), nil
+}
+
+func LockFilePath() (string, error) {
+	appPath, err := ConfigDirPath()
+	if err != nil {
+		return "", err
+	}
+
+	return filepath.Join(appPath, "gesture-control.pid"), nil
+}
+
+func Init() error {
+	cfgFilePath, err := ConfigFilePath()
+	if err != nil {
+		return err
+	}
+
+	viper.SetConfigFile(cfgFilePath)
+	viper.SetConfigType("yaml")
+	viper.SetEnvPrefix("gesture")
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	viper.AutomaticEnv()
+
+	setDefaults()
+
+	cfgDirPath, err := ConfigDirPath()
+	if err != nil {
+		return err
+	}
+	if err := os.MkdirAll(cfgDirPath, 0o755); err != nil {
+		return fmt.Errorf("create config dir: %w", err)
+	}
+	if _, err := os.Stat(cfgFilePath); errors.Is(err, os.ErrNotExist) {
+		return nil
+	}
+	if err := viper.ReadInConfig(); err != nil {
+		return fmt.Errorf("read config: %w", err)
+	}
+
+	return nil
 }
 
 func Load() (Config, error) {
@@ -104,7 +126,7 @@ func Load() (Config, error) {
 }
 
 func Save(cfg Config) error {
-	path, err := ConfigPath()
+	path, err := ConfigFilePath()
 	if err != nil {
 		return err
 	}
@@ -127,15 +149,13 @@ func Save(cfg Config) error {
 }
 
 func SaveCurrent() error {
-	path, err := ConfigPath()
+	path, err := ConfigFilePath()
 	if err != nil {
 		return err
 	}
-
 	if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
 		return err
 	}
-
 	if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
 		return viper.WriteConfigAs(path)
 	}
@@ -154,13 +174,4 @@ func Reset() error {
 
 func NeedsWizard(cfg Config) bool {
 	return strings.TrimSpace(cfg.APIKey) == ""
-}
-
-func LockFilePath() (string, error) {
-	configPath, err := ConfigPath()
-	if err != nil {
-		return "", err
-	}
-
-	return filepath.Join(filepath.Dir(configPath), "gesture-control.pid"), nil
 }

@@ -49,7 +49,7 @@ var startCmd = &cobra.Command{
 				return wrapCLIError(exitConfig, "save config: %v", err)
 			}
 
-			fmt.Println("✓ Настройка завершена. Запустите: gesture-control start")
+			fmt.Println("✓ Настройка завершена. Производится запуск утилиты...")
 		}
 
 		applyOverrides(cmd, &cfg)
