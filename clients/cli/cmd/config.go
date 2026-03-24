@@ -102,8 +102,7 @@ var configWizardCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		cfg, _ := appconfig.Load()
 
-		cfg, err := wizard.Run(cfg)
-		if err != nil {
+		if err := wizard.Run(&cfg); err != nil {
 			return wrapCLIError(exitConfig, "%v", err)
 		}
 

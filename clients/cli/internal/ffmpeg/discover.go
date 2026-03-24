@@ -60,6 +60,5 @@ func Validate(path string) (string, error) {
 
 	var version string
 	fmt.Sscanf(string(out), "ffmpeg version %s", &version)
-
 	return version, nil
 }

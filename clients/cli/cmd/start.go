@@ -41,8 +41,7 @@ var startCmd = &cobra.Command{
 		}
 
 		if appconfig.NeedsWizard(cfg) {
-			cfg, err = wizard.Run(cfg)
-			if err != nil {
+			if err = wizard.Run(&cfg); err != nil {
 				return wrapCLIError(exitConfig, "%v", err)
 			}
 			if err := appconfig.Save(cfg); err != nil {
