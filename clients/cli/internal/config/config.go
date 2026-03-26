@@ -129,12 +129,12 @@ func writeConfig() error {
 // Переменные окружения имеют приоритет над файлом; префикс - GESTURE_,
 // точки в ключах заменяются на подчёркивания (например, GESTURE_FFMPEG_FPS).
 func Init() error {
-	cfgFilePath, err := ConfigFilePath()
+	filePath, err := ConfigFilePath()
 	if err != nil {
 		return err
 	}
 
-	viper.SetConfigFile(cfgFilePath)
+	viper.SetConfigFile(filePath)
 	viper.SetConfigType("yaml")
 	viper.SetEnvPrefix("gesture")
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
@@ -145,7 +145,7 @@ func Init() error {
 	if _, err := ensureConfigDir(); err != nil {
 		return err
 	}
-	if _, err := os.Stat(cfgFilePath); errors.Is(err, os.ErrNotExist) {
+	if _, err := os.Stat(filePath); errors.Is(err, os.ErrNotExist) {
 		return nil
 	}
 	if err := viper.ReadInConfig(); err != nil {
